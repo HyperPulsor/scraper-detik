@@ -46,6 +46,7 @@ def get_dates():
 @app.get("/news/")
 async def read_article(ticker: str = Query(default = "bbca"), dateStart: str = Query(default = get_dates()[0]), dateEnd: str = Query(default = get_dates()[1])):
     new_list = get_links(ticker=ticker, start_date = dateStart, end_date=dateEnd)
+    print(new_list)
     response = await main(new_list)
     return response
 
@@ -90,10 +91,11 @@ def parse_news(responses):
 
         # Clean up the matches to remove any additional HTML tags within the paragraphs
         cleaned_matches = [re.sub(r'<.*?>', '', match).strip() for match in matches]
+        detailed_news.append((" ".join(cleaned_matches)))
 
         # Print the cleaned matches
-        for match in cleaned_matches:
-            detailed_news.append(match)
+        # for match in cleaned_matches:
+        #     detailed_news.append(("".join(cleaned_matches)))
     return detailed_news
 
 async def main(news_list):
